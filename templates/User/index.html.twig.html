@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{{ include('post/form.html.twig',{button:'Ajouter'}) }}
+{% for message in app.flashes('success') %}
+    {{ message }}
+{% endfor %}
+    {% for post in posts %}
+        <h2>{{ post.Title }}</h2>
+<a href="{{ path('post_edit',{id:post.id}}) }}">edit</a>
+
+    {% endfor %}
+{% endblock %}
