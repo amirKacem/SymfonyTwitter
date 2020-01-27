@@ -31,6 +31,12 @@ class Post
      */
     private $user_created;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="no")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $created_by;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +74,18 @@ class Post
     public function setUserCreated(int $user_created): self
     {
         $this->user_created = $user_created;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->created_by;
+    }
+
+    public function setCreatedBy(?User $created_by): self
+    {
+        $this->created_by = $created_by;
 
         return $this;
     }

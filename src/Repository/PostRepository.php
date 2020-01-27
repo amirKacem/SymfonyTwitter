@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Form\PostType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)

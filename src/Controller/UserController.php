@@ -12,6 +12,7 @@ use App\Repository\UserRepository;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -40,7 +41,7 @@ class UserController extends AbstractController
             $this->em->flush();
     }
 
-    /*
+    /**
      * @Route("/login",name="login")
      */
     public function login(AuthenticationUtils $auth){
@@ -56,29 +57,17 @@ class UserController extends AbstractController
      */
     public function index(){
         $posts = $this->postRepo->findAll();
-        return $this->render('User/index.html.twig',['posts'=>posts]);
-    }
-
-    /*
-    * @Route(name="user_post_create")
-    */
-    public function post(Post $post,Request $req){
-        $form = $this->createForm(PostType::class,$post);
-        $form->handleRequest($req);
-        if($form->isSubmitted() && $form->isValid()){
-            $this->persist($post);
-            $this->em->flush();
-            $this->addFlash('success','post added');
-            return $this->redirectToRoute('user_profil');
-        }
+        return $this->render('User/index.html.twig',['posts'=>$posts]);
     }
 
 
+
+
     /*
-    * @Route(name="user_post_edit"")
+    * @Route(name="user_post_edit")
     */
     public function edit(Post $post,Request $req){
-        $form = $this->createForm(PostType::class,$post);
+        $form = $this->createForm(PostType::class,null);
         $form->handleRequest($req);
         if($form->isSubmitted() && $form->isValid()){
             $this->em->flush();

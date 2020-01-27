@@ -2,12 +2,14 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-
+use App\Controller\PostController;
 class HomeController extends AbstractController
 {
     /**
@@ -26,12 +28,25 @@ class HomeController extends AbstractController
 
 
     /**
-    * @Route("/", methods={"GET"})
-    */
-    public function index(){
+     * @Route("/", name="home",methods={"GET"})
+     */
+    public function index(Request $req){
         $posts = $this->repositry->findAll();
 
-        return $this->render('Home/home.html.twig',['posts'=> $posts]);
+
+            $post = new post();
+            $form = $this->createForm(PostType::class,null);
+            $form->handleRequest($req);
+            if($form->isSubmitted() && $form->isValid()){
+                $this->persist($post);
+                $this->em->flush();
+                $this->addFlash('success','post added');
+            }
+
+
+
+        return $this->render('Home/home.html.twig',['posts'=> $posts,'form'=>$form->createView()]);
+
     }
 
 

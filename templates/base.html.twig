@@ -26,7 +26,31 @@
             {{ include('Includes/header.html.twig') }}
         {% endblock %}
     {% endif %}
-        {% block body %}{% endblock %}
+    <div class="main-section">
+        <div class="container">
+            <div class="main-section-data">
+                <div class="row">
+        {% block body %}
+
+                    {%  block LeftSidebar %}
+                        {{  include('Includes/LeftSidebar.html.twig') }}
+                    {% endblock %}
+                    {% block main %}
+
+                    {% endblock %}
+
+                    {%  block RightSidebar %}
+                        {{  include('Includes/RightSidebar.html.twig') }}
+                    {% endblock %}
+
+
+        {% endblock %}
+
+            </div><!-- end row-->
+        </div><!-- main-section-data end-->
+    </div>
+    </div>
+    </main>
         {% block javascripts %}
             <script type="text/javascript" src="{{   asset('js/jquery.min.js') }}"></script>
             <script type="text/javascript" src="{{   asset('js/popper.js') }}"></script>

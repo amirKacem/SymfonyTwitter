@@ -1,0 +1,9 @@
+# config/packages/kms_froala_editor.yaml
+kms_froala_editor:
+  language: en
+  toolbarInline: false
+  tableColors: [ "#FFFFFF", "#FF0000" ]
+  saveParams: { "id" : "myEditorField" }
+  quickInsertTags : ['p', 'div', 'h1','h2','h3','h4','h4','pre', 'blockquote']
+  imageUploadFolder: "/images/upload/"
+  imageUploadPath: "/images/upload/"
