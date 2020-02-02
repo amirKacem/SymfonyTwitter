@@ -23,9 +23,10 @@ class UserController extends AbstractController
      */
     private $postRepo;
     private  $em;
+    private $encoder;
 
 
-    public function __construct(PostRepository $postRepo,UserPasswordEncoderInterface $encoder)
+    /*public function __construct(PostRepository $postRepo,UserPasswordEncoderInterface $encoder)
     {
         $this->postRepo =$postRepo;
         $this->em = $this->getDoctrine()->getManager();
@@ -39,16 +40,18 @@ class UserController extends AbstractController
             $user->setPassword($this->encoder->encodePassword($user,'password'));
             $this->em->persist($user);
             $this->em->flush();
-    }
+    }*/
 
     /**
      * @Route("/login",name="login")
      */
     public function login(AuthenticationUtils $auth){
         $username = $auth->getLastUsername();
+        $error = $auth->getLastAuthenticationError();
+
         return $this->render('User/login.html.twig',
             ['username'=>$username,
-                'error'=>$auth->getLastUsername()
+                'error'=>$error
                 ]);
     }
 

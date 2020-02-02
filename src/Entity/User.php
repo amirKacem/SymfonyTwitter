@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User implements UserInterface,\Serializable
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -44,6 +44,7 @@ class User implements UserInterface,\Serializable
      */
     private $lastname;
 
+    private $roles=[];
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -82,6 +83,8 @@ class User implements UserInterface,\Serializable
     public function getRoles()
     {
         // TODO: Implement getRoles() method.
+        return array('ROLE_USER');
+
     }
 
     /**
@@ -108,29 +111,7 @@ class User implements UserInterface,\Serializable
 
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function serialize()
-    {
-        return serialize([
-            $this->id,
-            $this->username,
-            $this->password
-        ]);
-    }
 
-    /**
-     * @inheritDoc
-     */
-    public function unserialize($serialized)
-    {
-        list(
-            $this->id,
-            $this->username,
-            $this->password
-            )= $this->unserialize($serialized,['allowed_classes'=>false]);
-    }
 
     /**
      * @return Collection|Post[]
