@@ -13,7 +13,7 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class UserController extends AbstractController
@@ -46,16 +46,30 @@ class UserController extends AbstractController
      * @Route("/login",name="login")
      */
     public function login(AuthenticationUtils $auth){
+        //$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $username = $auth->getLastUsername();
         $error = $auth->getLastAuthenticationError();
+        if($this->isGranted('ROLE_USER')){
+            return $this->redirectToRoute('home');
+        }else {
 
-        return $this->render('User/login.html.twig',
-            ['username'=>$username,
-                'error'=>$error
+            return $this->render('User/login.html.twig',
+                ['username' => $username,
+                    'error' => $error
                 ]);
+        }
+        }
+
+    /**
+     * @Route("logout",name="logout")
+     */
+    public function logout(){
+        throw new \Exception('logout');
+
     }
 
-    /*
+    /**
      * @Route("/user/{username}",name="user_profil")
      */
     public function index(){

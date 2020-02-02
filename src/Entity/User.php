@@ -44,7 +44,11 @@ class User implements UserInterface
      */
     private $lastname;
 
-    private $roles=[];
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $roles = [];
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -80,12 +84,16 @@ class User implements UserInterface
     /**
      * @inheritDoc
      */
-    public function getRoles()
-    {
-        // TODO: Implement getRoles() method.
-        return array('ROLE_USER');
 
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
+
 
     /**
      * @inheritDoc
@@ -93,6 +101,7 @@ class User implements UserInterface
     public function getPassword()
     {
         // TODO: Implement getPassword() method.
+        return $this->password;
     }
 
     /**
