@@ -35,7 +35,6 @@ class PostRepository extends ServiceEntityRepository
     public function findLastPosts($limit):array
     {
         return $this->createQueryBuilder('p')
-            ->where('user_id=$user_id')
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();

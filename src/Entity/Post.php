@@ -26,16 +26,14 @@ class Post
      */
     private $description;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $user_created;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="no")
      * @ORM\JoinColumn(nullable=false)
      */
     private $created_by;
+
+
 
     public function getId(): ?int
     {
@@ -66,17 +64,7 @@ class Post
         return $this;
     }
 
-    public function getUserCreated(): ?int
-    {
-        return $this->user_created;
-    }
 
-    public function setUserCreated(int $user_created): self
-    {
-        $this->user_created = $user_created;
-
-        return $this;
-    }
 
     public function getCreatedBy(): ?User
     {
@@ -89,4 +77,6 @@ class Post
 
         return $this;
     }
+
+
 }

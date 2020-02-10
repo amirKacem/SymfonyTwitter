@@ -1,0 +1,9 @@
+.post-title{
+    font-weight: bold;
+    font-size: 19px;
+}
+.post-content img{
+    display:block;
+    float: none;
+    width: 100%!important;
+}

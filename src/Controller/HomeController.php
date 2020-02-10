@@ -5,6 +5,7 @@ use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,34 +21,58 @@ class HomeController extends AbstractController
     private $em;
 
 
-    public function __construct(PostRepository $repositry)
+    public function __construct(PostRepository $repositry,EntityManagerInterface $em)
     {
         $this->repositry = $repositry;
+        $this->em = $em;
 
     }
 
 
     /**
-     * @Route("/", name="home",methods={"GET"})
+     * @Route("/", name="home")
      */
     public function index(Request $req){
         $posts = $this->repositry->findAll();
+        $last_posts = $posts = $this->repositry->findLastPosts(10);
 
+        $form = $this->createForm(PostType::class);
 
-            $post = new post();
-            $form = $this->createForm(PostType::class,null);
+        if ($req->isMethod('POST')) {
             $form->handleRequest($req);
-            if($form->isSubmitted() && $form->isValid()){
-                $this->persist($post);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $post = $form->getData();
+
+                $post->setCreatedBy($this->getUser());
+                $this->em->persist($post);
+
                 $this->em->flush();
-                $this->addFlash('success','post added');
+                $this->addFlash('success', 'post added');
+                return $this->redirectToRoute('home');
             }
+        }
 
 
+        return $this->render('Home/home.html.twig',[
+            'posts'=> $posts,
+            'form'=>$form->createView(),
+            'last_posts'=>$last_posts
 
-        return $this->render('Home/home.html.twig',['posts'=> $posts,'form'=>$form->createView()]);
+        ]);
 
     }
+
+    /**
+     * @Route("/post/{id}",name="show_post")
+     */
+    public function show($id){
+        $post = $this->repositry->find($id);
+        return $this->render('post/single_post.html.twig',['post'=>$post]);
+
+    }
+
 
 
     public function addPost(){

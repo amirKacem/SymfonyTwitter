@@ -1,5 +1,8 @@
 {%  extends 'base.html.twig' %}
-
+{%  block stylesheets  %}
+    {{  parent() }}
+    <link rel="stylesheet" type="text/css" href="{{  asset('css/home.css') }}">
+{% endblock %}
 {%  block body %}
 
     {% block LeftSidebar %}
@@ -18,22 +21,11 @@
                             <h3>Article</h3>
 
                         </div>
-                        <form>
-                            <div class="row">
-
-
                                 <div class="col-lg-12">
                                     {{ include('post/form.html.twig') }}
 
                                 </div>
-                                <div class="col-lg-12 justify-content-center">
-                                    <ul>
-                                        <li><button class="active" type="submit" value="post">Post</button></li>
-                                        <li><a href="#" title="">Cancel</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </form>
+
                     </div><!--post-project-fields end-->
 
                 </div>
@@ -46,7 +38,7 @@
                         <div class="usy-dt">
                             <img src="http://via.placeholder.com/50x50" alt="">
                             <div class="usy-name">
-                                <h3>John Doe</h3>
+                                <h3>{{  post.getCreatedBy.username }} </h3>
                                 <span><img src="images/clock.png" alt="">3 min ago</span>
                             </div>
                         </div>
@@ -62,10 +54,13 @@
                         </div>
                     </div>
 
-                    <div class="job_descp">
-                        <h3>{{ post.Title }}</h3>
 
-                        <p>  {{ post.Description }} ... <a href="#" title="">view more</a></p>
+                        <h1 class="py-2 ml-2 post-title">{{ post.Title }}</h1>
+                        <div class="d-flex flex-column post-content p-3">
+                            {{ post.Description|raw }}          <a href="{{ path('show_post',{'id':post.id}) }}" title="">view more</a>
+                        </div>
+
+
                         <ul class="skill-tags">
                             <li><a href="#" title="">HTML</a></li>
                             <li><a href="#" title="">PHP</a></li>
@@ -73,7 +68,7 @@
                             <li><a href="#" title="">Javascript</a></li>
                             <li><a href="#" title="">Wordpress</a></li>
                         </ul>
-                    </div>
+
                     <div class="job-status-bar">
                         <ul class="like-com">
                             <li>

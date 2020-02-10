@@ -7,14 +7,21 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Form\PostType;
+use App\Form\UserRegisterType;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
-use Doctrine\Persistence\ObjectManager;
+use App\Security\LoginFormAuthenticator;
+use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 class UserController extends AbstractController
 {
@@ -22,25 +29,47 @@ class UserController extends AbstractController
      *
      */
     private $postRepo;
-    private  $em;
+    private  $objectManager;
     private $encoder;
 
 
-    /*public function __construct(PostRepository $postRepo,UserPasswordEncoderInterface $encoder)
+    public function __construct(PostRepository $postRepo,UserPasswordEncoderInterface $encoder,EntityManagerInterface $objectManager)
     {
         $this->postRepo =$postRepo;
-        $this->em = $this->getDoctrine()->getManager();
+        $this->objectManager = $objectManager;
         $this->encoder = $encoder;
 
     }
+    /**
+     * @Route("/register",name="register")
+     */
+    public function register(Request $req,GuardAuthenticatorHandler $guardhandler,LoginFormAuthenticator $formAuthenticator){
 
-    public function Inscription(){
-            $user = new User();
-            $user->setUsername();
-            $user->setPassword($this->encoder->encodePassword($user,'password'));
-            $this->em->persist($user);
-            $this->em->flush();
-    }*/
+            $form = $this->createForm(UserRegisterType::class);
+            $form->handleRequest($req);
+            if($req->isMethod('POST')){
+
+                if($form->isValid() && $form->isSubmitted()){
+                    $user = $form->getData();
+                    $user->setPassword($this->encoder->encodePassword(
+                        $user,
+                        $user->getPassword()
+                    ));
+                    $this->objectManager->persist($user);
+                    $this->objectManager->flush();
+                    return $guardhandler->authenticateUserAndHandleSuccess(
+                        $user,
+                        $req,
+                        $formAuthenticator,
+                        'main'
+                    );
+                }
+            }
+
+            return $this->render('User/register.html.twig',['form'=>
+            $form->createView()
+            ]);
+    }
 
     /**
      * @Route("/login",name="login")

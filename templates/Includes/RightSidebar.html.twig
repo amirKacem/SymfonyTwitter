@@ -1,65 +1,24 @@
 <div class="col-lg-3 pd-right-none no-pd">
     <div class="right-sidebar">
-        <div class="widget widget-about">
-            <img src="images/wd-logo.png" alt="">
-            <h3>Track Time on Workwise</h3>
-            <span>Pay only for the Hours worked</span>
-            <div class="sign_link">
-                <h3><a href="#" title="">Sign up</a></h3>
-                <a href="#" title="">Learn More</a>
-            </div>
-        </div><!--widget-about end-->
+
         <div class="widget widget-jobs">
             <div class="sd-title">
-                <h3>Top Jobs</h3>
+                <h3>Last 10 Posts</h3>
                 <i class="la la-ellipsis-v"></i>
             </div>
             <div class="jobs-list">
-                <div class="job-info">
+                {% for post in last_posts %}
+                <div class= "job-info">
                     <div class="job-details">
-                        <h3>Senior Product Designer</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit..</p>
+                        <h3>{{ post.Title }}</h3>
+                        <p> {{  post.Description|striptags|slice(0, 40)  }} ...</p>
                     </div>
                     <div class="hr-rate">
-                        <span>$25/hr</span>
+                        <span>{{ post.getCreatedBy.username }}</span>
                     </div>
                 </div><!--job-info end-->
-                <div class="job-info">
-                    <div class="job-details">
-                        <h3>Senior UI / UX Designer</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit..</p>
-                    </div>
-                    <div class="hr-rate">
-                        <span>$25/hr</span>
-                    </div>
-                </div><!--job-info end-->
-                <div class="job-info">
-                    <div class="job-details">
-                        <h3>Junior Seo Designer</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit..</p>
-                    </div>
-                    <div class="hr-rate">
-                        <span>$25/hr</span>
-                    </div>
-                </div><!--job-info end-->
-                <div class="job-info">
-                    <div class="job-details">
-                        <h3>Senior PHP Designer</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit..</p>
-                    </div>
-                    <div class="hr-rate">
-                        <span>$25/hr</span>
-                    </div>
-                </div><!--job-info end-->
-                <div class="job-info">
-                    <div class="job-details">
-                        <h3>Senior Developer Designer</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit..</p>
-                    </div>
-                    <div class="hr-rate">
-                        <span>$25/hr</span>
-                    </div>
-                </div><!--job-info end-->
+                {% endfor %}
+
             </div><!--jobs-list end-->
         </div><!--widget-jobs end-->
         <div class="widget widget-jobs">

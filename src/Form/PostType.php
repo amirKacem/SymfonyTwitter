@@ -16,10 +16,11 @@ class PostType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('description',FroalaEditorType::class)    
-            ->add('user_created')
+            ->add('description',FroalaEditorType::class);
 
-        ;
+
+
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

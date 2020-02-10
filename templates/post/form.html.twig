@@ -1,4 +1,16 @@
-{{ form_start(form) }}
+{% if is_granted('ROLE_USER') %}
 
-                                    {{ form_end(form) }}
-<button class="btn btn-primary">{{ button|default('Add') }}</button>
+
+{{ form_start(form,{'method': 'POST'}) }}
+{{ form_widget(form) }}
+    <div class="d-flex justify-content-center">
+<button type="submit" class="btn btn-primary mx-auto ">{{ button|default('Post') }}</button>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success col-5 ml-3 d-inline">
+            {{ message }}
+        </div>
+    {% endfor %}
+    </div>
+{{ form_end(form) }}
+{%  endif %}
+
