@@ -36,5 +36,6 @@ final class Version20200208131756 extends AbstractMigration
         $this->addSql('DROP INDEX UNIQ_8D93D649F85E0677 ON user');
         $this->addSql('DROP INDEX UNIQ_8D93D649E7927C74 ON user');
         $this->addSql('ALTER TABLE user CHANGE username username VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`');
+
     }
 }

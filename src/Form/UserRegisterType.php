@@ -20,9 +20,9 @@ class UserRegisterType extends AbstractType
             ->add('password',PasswordType::class)
             ->add('firstname')
             ->add('lastname')
-            ->add('email')
-            ->add('image_url')
-        ;
+            ->add('email');
+
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

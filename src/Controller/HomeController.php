@@ -38,6 +38,7 @@ class HomeController extends AbstractController
 
         $form = $this->createForm(PostType::class);
 
+
         if ($req->isMethod('POST')) {
             $form->handleRequest($req);
 

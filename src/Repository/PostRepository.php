@@ -27,7 +27,8 @@ class PostRepository extends ServiceEntityRepository
     public function findAllUserPost($user_id):array
     {
         return $this->createQueryBuilder('p')
-            ->where('user_id=$user_id')
+            ->where('created_by_id=:user_id')
+            ->setParameters('created_by_id',$user_id)
             ->getQuery()
             ->getResult();
     }

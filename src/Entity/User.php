@@ -6,13 +6,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ApiResource
  */
 class User implements UserInterface
 {
     /**
+     * @Groups("posts")
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -20,48 +24,64 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=190,unique=true)
+     *@ORM\Column(type="string", length=190,unique=true)
+     *
      */
     private $username;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="created_by")
+     * @Groups("posts")
      */
     private $no;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("posts")
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"posts"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="array")
+     *
      */
     private $roles = [];
 
     /**
-     * @ORM\Column(type="text", nullable=true,length=171,unique=true)
+     * @ORM\Column(type="string", length=150,nullable=true,unique=true)
      */
     private $email;
 
+
+
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Profile", mappedBy="user_id")
      */
-    private $image_url;
+    private $profiles;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="comment_by")
+     * @Groups({"posts"})
+     */
+    private $comments;
 
     public function __construct()
     {
         $this->no = new ArrayCollection();
+        $this->profiles = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,14 +216,66 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getImageUrl(): ?string
+
+
+    /**
+     * @return Collection|Profile[]
+     */
+    public function getProfiles(): Collection
     {
-        return $this->image_url;
+        return $this->profiles;
     }
 
-    public function setImageUrl(?string $image_url): self
+    public function addProfile(Profile $profile): self
     {
-        $this->image_url = $image_url;
+        if (!$this->profiles->contains($profile)) {
+            $this->profiles[] = $profile;
+            $profile->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfile(Profile $profile): self
+    {
+        if ($this->profiles->contains($profile)) {
+            $this->profiles->removeElement($profile);
+            // set the owning side to null (unless already changed)
+            if ($profile->getUserId() === $this) {
+                $profile->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setCommentBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getCommentBy() === $this) {
+                $comment->setCommentBy(null);
+            }
+        }
 
         return $this;
     }
