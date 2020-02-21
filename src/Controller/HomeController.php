@@ -32,11 +32,15 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function index(Request $req){
+    public function index(Request $req)
+    {
+      if($this->isGranted('ROLE_USER')) // user authentificated
+      {
+
         $posts = $this->repositry->findAll();
         $last_posts = $posts = $this->repositry->findLastPosts(10);
-
         $form = $this->createForm(PostType::class);
+        $user = $this->getUser();
 
 
         if ($req->isMethod('POST')) {
@@ -59,9 +63,13 @@ class HomeController extends AbstractController
         return $this->render('Home/home.html.twig',[
             'posts'=> $posts,
             'form'=>$form->createView(),
-            'last_posts'=>$last_posts
+            'last_posts'=> $last_posts,
+            'user'=> $user
 
         ]);
+      }else{
+        return $this->redirectToRoute('login');
+      }
 
     }
 

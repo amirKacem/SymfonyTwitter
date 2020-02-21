@@ -1,5 +1,6 @@
 <div class="col-lg-3 col-md-4 pd-left-none no-pd">
         <div class="main-left-sidebar no-margin">
+        {% if user != null %}
             <div class="user-data full-width">
                 <div class="user-profile">
                     <div class="username-dt">
@@ -8,8 +9,8 @@
                         </div>
                     </div><!--username-dt end-->
                     <div class="user-specs">
-                        <h3>John Doe</h3>
-                        <span>Graphic Designer at Self Employed</span>
+                        <h3>{{user.firstname}} {{user.lastname}}</h3>
+                        <span>{{user.username}}</span>
                     </div>
                 </div><!--user-profile end-->
                 <ul class="user-fw-status">
@@ -22,10 +23,11 @@
                         <span>155</span>
                     </li>
                     <li>
-                        <a href="#" title="">View Profile</a>
+                        <a href="user/{{user.id}}" title="">View Profile</a>
                     </li>
                 </ul>
             </div><!--user-data end-->
+      {% endif %}
             <div class="suggestions full-width">
                 <div class="sd-title">
                     <h3>Suggestions</h3>

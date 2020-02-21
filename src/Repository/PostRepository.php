@@ -27,10 +27,10 @@ class PostRepository extends ServiceEntityRepository
     public function findAllUserPost($user_id):array
     {
         return $this->createQueryBuilder('p')
-            ->where('created_by_id=:user_id')
-            ->setParameters('created_by_id',$user_id)
-            ->getQuery()
-            ->getResult();
+               ->where('p.created_by=:user_id')
+               ->setParameter('user_id',$user_id)
+               ->getQuery()
+              ->getResult();
     }
 
     public function findLastPosts($limit):array

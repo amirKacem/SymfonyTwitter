@@ -17,7 +17,7 @@ class UserFixture extends Fixture
     }
 
     public function load(ObjectManager  $manager)
-    {   for($i=0;$i<15;$i++){
+    {   for($i=0;$i<1;$i++){
 
 
         $user = new User();
@@ -26,7 +26,7 @@ class UserFixture extends Fixture
         $user->setUsername('amir'.$i);
         $user->setLastname('kacem2');
         $user->setPassword($this->encoder->encodePassword($user,'pass'));
-        $this->setRoles(['ROLE_USER']);
+        //$this->setRoles(['ROLE_USER']);
 
         $manager->persist($user);
     }

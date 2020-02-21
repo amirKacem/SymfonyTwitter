@@ -29,16 +29,17 @@ class UserController extends AbstractController
      *
      */
     private $postRepo;
-    private  $objectManager;
+    private $userRepo;
+    private $objectManager;
     private $encoder;
 
 
-    public function __construct(PostRepository $postRepo,UserPasswordEncoderInterface $encoder,EntityManagerInterface $objectManager)
+    public function __construct(UserRepository $userRepo,PostRepository $postRepo,UserPasswordEncoderInterface $encoder,EntityManagerInterface $objectManager)
     {
+        $this->userRepo =$userRepo;
         $this->postRepo =$postRepo;
         $this->objectManager = $objectManager;
         $this->encoder = $encoder;
-
     }
     /**
      * @Route("/register",name="register")
@@ -47,7 +48,8 @@ class UserController extends AbstractController
 
             $form = $this->createForm(UserRegisterType::class);
             $form->handleRequest($req);
-            if($req->isMethod('POST')){
+            if($req->isMethod('POST'))
+            {
 
                 if($form->isValid() && $form->isSubmitted()){
                     $user = $form->getData();
@@ -81,7 +83,7 @@ class UserController extends AbstractController
         $error = $auth->getLastAuthenticationError();
         if($this->isGranted('ROLE_USER')){
             return $this->redirectToRoute('home');
-        }else {
+        }else{
 
             return $this->render('User/login.html.twig',
                 ['username' => $username,
@@ -99,11 +101,22 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/{username}",name="user_profil")
+     * @Route("/user/{id}",name="user_profil")
      */
-    public function index(){
-        $posts = $this->postRepo->findAll();
-        return $this->render('User/index.html.twig',['posts'=>$posts]);
+    public function index($id){
+      if($this->isGranted('ROLE_USER')) // user authentificated
+      {
+
+        $users = $this->userRepo->findAll();
+        $loggedUser = $this->getUser();
+        $currentUser = $this->userRepo->find($id);
+        $last_posts = $this->postRepo->findLastPosts(10);
+        $posts = $this->postRepo->findAllUserPost($id);
+
+        return $this->render('account/index.html.twig',['last_posts'=>$last_posts,'posts'=>$posts,'users'=>$users,'currentUser' =>$currentUser,'loggedUser' =>$loggedUser]);
+      }else{
+        return $this->redirectToRoute('login');
+      }
     }
 
 
