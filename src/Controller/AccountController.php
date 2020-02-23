@@ -20,5 +20,12 @@ class AccountController extends AbstractController
 
     }
 
+    /**
+     * @Route("/settings/{id}",name="profile_settings")
+     */
+    public function index($id){
+        return $this->render('account/setting.html.twig');
+    }
+
 
 }

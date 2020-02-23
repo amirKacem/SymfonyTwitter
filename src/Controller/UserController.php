@@ -4,18 +4,13 @@
 namespace App\Controller;
 
 
-use App\Entity\Post;
+
 use App\Entity\Profile;
-use App\Entity\User;
-use App\Form\PostType;
 use App\Form\UserRegisterType;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use App\Service\Uploader;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -129,7 +124,7 @@ class UserController extends AbstractController
       if($this->isGranted('ROLE_USER')) // user authentificated
       {
 
-        $users = $this->userRepo->findAll();
+        $users = $this->userRepo->findAllLimit(10);
         $loggedUser = $this->getUser();
         $currentUser = $this->userRepo->find($id);
         $last_posts = $this->postRepo->findLastPosts(10);
@@ -140,40 +135,6 @@ class UserController extends AbstractController
         return $this->redirectToRoute('login');
       }
     }
-
-
-
-
-    /*
-    * @Route(name="user_post_edit")
-    */
-    public function edit(Post $post,Request $req){
-        $form = $this->createForm(PostType::class,null);
-        $form->handleRequest($req);
-        if($form->isSubmitted() && $form->isValid()){
-            $this->em->flush();
-            $this->addFlash('success','post updated');
-            return $this->redirectToRoute('user_profil');
-        }
-
-
-    }
-
-    /*
-   * @Route(name="user_post_delete",method="DELETE")
-   */
-    public function delete(Post $post,Request $req){
-        if($this->isCsrfTokenValid('Delete',$post->getId(),$req->get('token'))){
-            $this->em->remove();
-            $this->em->flush();
-            $this->addFlash('success','post deleted');
-            return $this->redirectToRoute('user_profil');
-        }
-
-    }
-
-
-
 
 
 

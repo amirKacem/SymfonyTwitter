@@ -6,16 +6,16 @@
         <div class="container">
             <div class="header-data">
                 <div class="logo">
-                    <a href="index.html" title=""><img src="{{  asset('images/logo_twitter_blue.png') }}" style="width:40px;height:40px;" alt=""></a>
+                    <a href="index.html" title=""><img src="{{  asset('images/logo_twitter_blue.png') }}" style="width:40px;height:30px;" alt=""></a>
                 </div><!--logo end-->
-                <div class="search-bar">
-                    <form>
-                        <input type="text" name="search" placeholder="Search...">
-                        <button type="submit"><i class="la la-search"></i></button>
-                    </form>
-                </div><!--search-bar end-->
+
+
                 <nav>
                     <ul>
+
+
+
+
                         <li>
                             <a href="{{ path('home') }}" title="">
                                 <span><img src="{{   asset('images/icon1.png') }}" alt=""></span>
@@ -31,58 +31,39 @@
                             </a>
 
                         </li>
+                        <li>
+                            <a  href="{{   path('profile_settings',{id:app.user.id}) }}" title="">
+                                <span><img src="{{   asset('images/icon6.png') }}" alt=""></span>
+                                Settings</a>
+                        </li>
+
+                    <li>
+                            <a  href="{{ path('logout') }}" title="">
+                                <span><img src="{{   asset('images/icon2.png') }}" alt=""></span>
+                                Logout</a>
+                    </li>
+
 
 
 
                     </ul>
+
                 </nav>
                 <div class="menu-btn">
-                    <a href="#" title=""><i class="fa fa-bars"></i></a>
+
                 </div><!--menu-btn end-->
                 <div class="user-account">
                     <div class="user-info">
-                        <img src="http://via.placeholder.com/30x30" alt="">
-                        <a href="#" title="">John</a>
-                        <i class="la la-sort-down"></i>
+                        {% if(app.user.profile.getProfilImg()) %}
+                            <img src="{{ asset('upload/user/'~ app.user.profile.getProfilImg())}}" alt="" width="30" height="30">
+
+
+                        {% else %}
+                            <img src="http://via.placeholder.com/100x100" alt="">
+                        {% endif %}
+
                     </div>
-                    <div class="user-account-settingss">
-                        <h3>Online Status</h3>
-                        <ul class="on-off-status">
-                            <li>
-                                <div class="fgt-sec">
-                                    <input type="radio" name="cc" id="c5">
-                                    <label for="c5">
-                                        <span></span>
-                                    </label>
-                                    <small>Online</small>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="fgt-sec">
-                                    <input type="radio" name="cc" id="c6">
-                                    <label for="c6">
-                                        <span></span>
-                                    </label>
-                                    <small>Offline</small>
-                                </div>
-                            </li>
-                        </ul>
-                        <h3>Custom Status</h3>
-                        <div class="search_form">
-                            <form>
-                                <input type="text" name="search">
-                                <button type="submit">Ok</button>
-                            </form>
-                        </div><!--search_form end-->
-                        <h3>Setting</h3>
-                        <ul class="us-links">
-                            <li><a href="profile-account-setting.html" title="">Account Setting</a></li>
-                            <li><a href="#" title="">Privacy</a></li>
-                            <li><a href="#" title="">Faqs</a></li>
-                            <li><a href="#" title="">Terms & Conditions</a></li>
-                        </ul>
-                        <h3 class="tc"><a href="sign-in.html" title="">Logout</a></h3>
-                    </div><!--user-account-settingss end-->
+
                 </div>
             </div><!--header-data end-->
         </div>

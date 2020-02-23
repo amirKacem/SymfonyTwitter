@@ -8,10 +8,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_USER') or object.comment_by == user"},
- *      formats={"json"},
- *     normalizationContext={"groups"={"comments"}})
  */
 class Comment
 {
@@ -44,7 +40,7 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"comments"})
+     *
      */
     private $post;
 

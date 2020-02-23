@@ -14,8 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ApiResource(formats={"json"},
- *      normalizationContext={"groups"={"posts"}},)
  * @UniqueEntity(
  * fields={"username"},
  * errorPath="usename",
@@ -37,14 +35,12 @@ class User implements UserInterface
 
     /**
      *@ORM\Column(type="string", length=190,unique=true)
-     * @Groups({"posts"})
      * @Assert\NotBlank
      */
     private $username;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="created_by")
-     * @Groups({"posts"})
      */
     private $no;
 
@@ -56,14 +52,12 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"posts"})
      * @Assert\NotBlank
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"posts"})
      * @Assert\NotBlank
      */
     private $lastname;

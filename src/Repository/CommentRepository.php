@@ -22,19 +22,19 @@ class CommentRepository extends ServiceEntityRepository
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function countPostComments($post_id)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $query = $this->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->andWhere('c.post = :id')
+            ->setParameter('id', $post_id)
+            ->getQuery();
+        return $query->getSingleScalarResult();
+
+
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Comment

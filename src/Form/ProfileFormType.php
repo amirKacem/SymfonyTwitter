@@ -16,8 +16,8 @@ class ProfileFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('short_presentation',TextType::class,
-                ['required'=>false])
+            ->add('short_presentation',TextareaType::class,
+                ['required'=>false,'attr'=>['maxlength'=>255]])
             ->add('description',TextareaType::class,
                 ['required'=>false])
             ->add('profil_img',FileType::class,

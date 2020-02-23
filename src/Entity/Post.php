@@ -11,8 +11,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
- * @ApiResource(normalizationContext={"groups"={"posts","comments"}},
- *     formats={"json"})
  */
 class Post
 {
@@ -25,7 +23,6 @@ class Post
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"posts","comments"})
      */
     private $title;
 
@@ -33,13 +30,11 @@ class Post
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"posts","comments"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"posts","comments"})
      */
     private $created_at;
 

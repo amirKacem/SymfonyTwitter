@@ -29,59 +29,7 @@
                     </div><!--post-project-fields end-->
 
                 </div>
-                {%  for post in posts  %}
-
-
-
-                <div class="post-bar">
-                    <div class="post_topbar">
-                        <div class="usy-dt">
-                            <img src="http://via.placeholder.com/50x50" alt="">
-                            <div class="usy-name">
-                                <h3>{{  post.getCreatedBy.username }} </h3>
-                                <span><img src="images/clock.png" alt="">3 min ago</span>
-                            </div>
-                        </div>
-                        <div class="ed-opts">
-                            <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
-                            <ul class="ed-options">
-                                <li><a href="#" title="">Edit Post</a></li>
-                                <li><a href="#" title="">Unsaved</a></li>
-                                <li><a href="#" title="">Unbid</a></li>
-                                <li><a href="#" title="">Close</a></li>
-                                <li><a href="#" title="">Hide</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-
-                        <h1 class="py-2 ml-2 post-title">{{ post.Title }}</h1>
-                        <div class="d-flex flex-column post-content p-3">
-                            {{ post.Description|raw }}          <a href="{{ path('show_post',{'id':post.id}) }}" title="">view more</a>
-                        </div>
-
-
-                        <ul class="skill-tags">
-                            <li><a href="#" title="">HTML</a></li>
-                            <li><a href="#" title="">PHP</a></li>
-                            <li><a href="#" title="">CSS</a></li>
-                            <li><a href="#" title="">Javascript</a></li>
-                            <li><a href="#" title="">Wordpress</a></li>
-                        </ul>
-
-                    <div class="job-status-bar">
-                        <ul class="like-com">
-                            <li>
-                                <a href="#"><i class="la la-heart"></i> Like</a>
-                                <img src="images/liked-img.png" alt="">
-                                <span>25</span>
-                            </li>
-                            <li><a href="#" title="" class="com"><img src="images/com.png" alt=""> Comment 15</a></li>
-                        </ul>
-                        <a><i class="la la-eye"></i>Views 50</a>
-                    </div>
-                </div>
-                {% endfor %}
+           {{ include('post/list.html.twig') }}
             </div><!--main-ws-sec end-->
 
 

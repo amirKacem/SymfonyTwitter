@@ -1,0 +1,27 @@
+<div class="suggestions full-width">
+    <div class="sd-title">
+        <h3>Pepole</h3>
+        <i class="la la-ellipsis-v"></i>
+    </div><!--sd-title end-->
+    <div class="suggestions-list">
+        {% for user in users %}
+            {% if app.user.id != user.id %}
+                <div class="suggestion-usd">
+                    {% if(user.profile.getProfilImg()) %}
+                        <img src="{{   asset('/upload/user/'~user.profile.getProfilImg()) }}" alt=""width="50" height="50">
+                    {%  else %}
+                        <img src="http://via.placeholder.com/50x50" alt="">
+                    {%  endif %}
+                    <div class="sgt-text">
+                        <h4>{{user.firstname}} {{user.lastname}}</h4>
+                        <span>{{user.username}}</span>
+                    </div>
+                    <span onclick="showProfilUser('{{user.username}}')"><i class="la la-plus"></i></span>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="view-more">
+            <a href="#" title="">View More</a>
+        </div>
+    </div><!--suggestions-list end-->
+</div><!--suggestions end-->

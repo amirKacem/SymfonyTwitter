@@ -53,12 +53,16 @@
                                         {{ form_row(form.lastname) }}
                                     </div>
                                     <div class="col-6">
-                                        {{ form_row(form.password) }}
+                                        {{ form_row(form.password.first) }}
+
                                     </div>
+                                        <div class="col-6">
+                                        {{ form_row(form.password.second) }}
+                                        </div>
                                     <div class="col-6">
                                         {{ form_row(form.email) }}
                                     </div>
-                                        <div class="col-6">
+                                        <div class="col-12">
                                             {{ form_row(form.Profile.short_presentation) }}
                                         </div>
                                     <div class="col-8">

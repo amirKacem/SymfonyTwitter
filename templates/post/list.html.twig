@@ -1,0 +1,50 @@
+{%  for post in posts  %}
+
+
+
+    <div class="post-bar">
+        <div class="post_topbar">
+            <div class="usy-dt">
+                {% if(post.getCreatedBy.profile.getProfilImg()) %}
+                <img src="{{   asset('/upload/user/'~post.getCreatedBy.profile.getProfilImg()) }}" alt=""width="50" height="50">
+                    {%  else %}
+                        <img src="http://via.placeholder.com/50x50" alt="">
+                {%  endif %}
+                <div class="usy-name">
+                    <h3>{{  post.getCreatedBy.username }} </h3>
+                    <span><img src="{{   asset('images/clock.png') }}" alt="">{{ post.createdAt | date }}</span>
+                </div>
+            </div>
+            <div class="ed-opts">
+                <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                <ul class="ed-options">
+                    <li><a href="{{ path('user_post_edit',{id:post.id}) }}" title="">Edit Post</a></li>
+
+                    <li><a href="{{ path('user_post_delete',{id:post.id}) }}" title="">Delete</a></li>
+
+                </ul>
+            </div>
+        </div>
+
+
+        <h1 class="py-2 ml-2 post-title">{{ post.Title }}</h1>
+        <div class="d-flex flex-column post-content p-3">
+            {{ post.Description|raw }}
+            <a class="text-center" href="{{ path('show_post',{'id':post.id}) }}" title="">view more</a>
+        </div>
+
+
+
+        <div class="job-status-bar">
+            <ul class="like-com">
+                <li>
+                    <a href="#"><i class="la la-heart"></i> Like</a>
+                    <img src="images/liked-img.png" alt="">
+                    <span>25</span>
+                </li>
+                <li><a href="#" title="" class="com"><img src="images/com.png" alt=""> Comment 15</a></li>
+            </ul>
+
+        </div>
+    </div>
+{% endfor %}

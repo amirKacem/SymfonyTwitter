@@ -8,7 +8,10 @@
             <div class="forum-questions-sec">
                 <div class="row">
                     <div class="col-lg-8">
-                        <div class="forum-post-view">
+                        <input type="hidden" id="userId" value="{{ post.getCreatedBy().id }}">
+                        <input type="hidden" id="postId" value="{{ post.id }}">
+                        <div class="forum-post-view" >
+
                             <div class="usr-question">
                                 <div class="usr_img">
                                     <img src="http://via.placeholder.com/60x60" alt="">
@@ -18,57 +21,39 @@
                                     <span><i class="fa fa-clock-o"></i>3 min ago</span>
 
                                     {{ post.description | raw }}
-                                    <div class="comment-section">
+
+                                    <div class="comment-sec">
+                                        <h3>{{ nbComments }} Comments</h3>
+                                        <ul>
                                         {% for  comment in post.comments %}
-                                            {{ comment.content }}
+
+                                            <li>
+                                                <div class="comment-list">
+                                                    <div class="bg-img">
+                                                        {% if(comment.getCommentBy.profile.getProfilImg()) %}
+                                                            <img src="{{   asset('/upload/user/'~comment.getCommentBy.profile.getProfilImg()) }}" alt=""width="50" height="50">
+                                                        {%  else %}
+                                                            <img src="http://via.placeholder.com/50x50" alt="">
+                                                        {%  endif %}
+                                                    </div>
+                                                    <div class="comment">
+                                                        <h3>{{ comment.getCommentBy().username }}</h3>
+                                                        <span><img src="images/clock.png" alt="">{{ comment.createdat | date }}</span>
+                                                        <p>{{ comment.content }}</p>
+                                                    </div>
+                                                </div><!--comment-list end-->
+                                            </li>
+
+
                                         {% endfor %}
-                                        <h3>03 Comments</h3>
-                                        <div class="comment-sec">
-                                            <ul>
-                                                <li>
-                                                    <div class="comment-list">
-                                                        <div class="bg-img">
-                                                            <img src="http://via.placeholder.com/40x40" alt="">
-                                                        </div>
-                                                        <div class="comment">
-                                                            <h3>John Smith</h3>
-                                                            <span><img src="images/clock.png" alt=""> 3 min ago</span>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse at libero elit. Mauris ultrices sed lorem nec efficitur.</p>
-                                                        </div>
-                                                    </div><!--comment-list end-->
-                                                </li>
-                                                <li>
-                                                    <div class="comment-list">
-                                                        <div class="bg-img">
-                                                            <img src="http://via.placeholder.com/40x40" alt="">
-                                                        </div>
-                                                        <div class="comment">
-                                                            <h3>John Doe</h3>
-                                                            <span><img src="images/clock.png" alt=""> 3 min ago</span>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus hendrerit metus, ut ullamcorper quam finibus at.</p>
-                                                        </div>
-                                                    </div><!--comment-list end-->
-                                                </li>
-                                                <li>
-                                                    <div class="comment-list">
-                                                        <div class="bg-img">
-                                                            <img src="http://via.placeholder.com/40x40" alt="">
-                                                        </div>
-                                                        <div class="comment">
-                                                            <h3>John Doe</h3>
-                                                            <span><img src="images/clock.png" alt=""> 3 min ago</span>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus hendrerit metus, ut ullamcorper quam finibus at.</p>
-                                                        </div>
-                                                    </div><!--comment-list end-->
-                                                </li>
-                                            </ul>
-                                        </div><!--comment-sec end-->
+
+
                                     </div>
                                 </div><!--usr_quest end-->
                             </div><!--usr-question end-->
                         </div><!--forum-post-view end-->
                         <div class="post-comment-box">
-                            <h3>03 Comments</h3>
+
                             <div class="user-poster">
                                 <div class="usr-post-img">
                                     <img src="http://via.placeholder.com/40x40" alt="">
@@ -82,8 +67,8 @@
                             </div><!--user-poster end-->
                         </div><!--post-comment-box end-->
                         <div class="next-prev">
-                            <a href="#" title="" class="fl-left">Preview</a>
-                            <a href="#" title="" class="fl-right">Next</a>
+                            <a href="{{ path('show_post',{id:post.id - 1 }) }}" title="" class="fl-left">Preview</a>
+                            <a href="{{ path('show_post',{id:post.id + 1 }) }}" title="" class="fl-right">Next</a>
                         </div><!--next-prev end-->
                     </div>
                     <div class="col-lg-4">
@@ -172,3 +157,8 @@
 
 
 {% endblock %}
+
+    {% block javascripts %}
+        {{  parent() }}
+        <script   src="{{ asset('js/comments/comments.js') }}"></script>
+    {% endblock %}
