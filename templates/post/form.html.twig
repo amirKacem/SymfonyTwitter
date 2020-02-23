@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-center">
 <button type="submit" class="btn btn-primary mx-auto ">{{ button|default('Post') }}</button>
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success col-5 ml-3 d-inline">
+        <div class="text-success text-center w-25 ml-3 d-block">
             {{ message }}
         </div>
     {% endfor %}

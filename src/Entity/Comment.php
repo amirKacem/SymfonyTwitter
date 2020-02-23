@@ -8,7 +8,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- * @ApiResource
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_USER') or object.comment_by == user"},
+ *      formats={"json"},
+ *     normalizationContext={"groups"={"comments"}})
  */
 class Comment
 {
@@ -19,27 +22,29 @@ class Comment
      */
     private $id;
 
+
+
     /**
      * @ORM\Column(type="text")
-     * @Groups("posts")
+     * @Groups({"comments"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"comments"})
      */
-    private $created_at;
+    private $createdat;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
-     *  @Groups({"posts"})
      */
     private $comment_by;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="yes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"posts"})
+     * @Groups({"comments"})
      */
     private $post;
 
@@ -60,17 +65,7 @@ class Comment
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
 
     public function getCommentBy(): ?User
     {
@@ -95,4 +90,28 @@ class Comment
 
         return $this;
     }
+
+    public function getCreatedat(): ?\DateTimeInterface
+    {
+        return $this->createdat;
+    }
+
+    public function setCreatedat(\DateTimeInterface $createdat): self
+    {
+        $this->createdat = $createdat;
+
+        return $this;
+    }
+
+    public function toString()
+    {
+        return "comment +";
+    }
+
+
+
+
+
+
+
 }

@@ -43,5 +43,14 @@ class PostController extends AbstractController
         return new JsonResponse($po,200,['Content-Type:application/json'],true);
     }
 
+    /**
+     * @Route("/post/{id}",name="show_post")
+     */
+    public function show($id){
+        $post = $this->repositry->find($id);
+        return $this->render('post/single_post.html.twig',['post'=>$post]);
+
+    }
+
 
 }

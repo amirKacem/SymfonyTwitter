@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Profile;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,11 +18,19 @@ class UserRegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username',TextType::class,['required'=>true])
-            ->add('password',PasswordType::class)
-            ->add('firstname')
-            ->add('lastname')
-            ->add('email');
+            ->add('username',TextType::class,
+                ['required'=>true])
+            ->add('password',PasswordType::class,
+                 ['required' => true])
+            ->add('firstname',TextType::class,
+                ['required' => true,  'error_bubbling' => true])
+            ->add('lastname',TextType::class,
+                ['required' => true])
+            ->add('email',EmailType::class)
+            ->add('Profile', ProfileFormType::class, [
+                'data_class' => Profile::class,
+            ]);
+
 
 
     }
@@ -29,6 +39,7 @@ class UserRegisterType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+
         ]);
     }
 }

@@ -20,14 +20,5 @@ class AccountController extends AbstractController
 
     }
 
-    /**
-     * @Route("/account", name="account")
-     */
-    public function index()
-    {
-        $last_posts = $posts = $this->postrepositry->findLastPosts(10);
-        return $this->render('account/index.html.twig', [
-            'last_posts'=>$last_posts
-        ]);
-    }
+
 }

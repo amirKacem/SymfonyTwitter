@@ -11,7 +11,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
- * @ApiResource(normalizationContext={"groups"={"posts"}})
+ * @ApiResource(normalizationContext={"groups"={"posts","comments"}},
+ *     formats={"json"})
  */
 class Post
 {
@@ -19,42 +20,46 @@ class Post
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"posts"})
+     * @Groups({"posts","comments"})
      */
     private $title;
 
+
+
     /**
      * @ORM\Column(type="text")
-     * @Groups({"posts"})
+     * @Groups({"posts","comments"})
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="datetime")
+     * @Groups({"posts","comments"})
+     */
+    private $created_at;
+
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="no")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"posts"})
+     * @Groups({"comments"})
      */
     private $created_by;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post")
-     * @Groups({"posts"})
      */
-    private $yes;
+    private $comments;
 
     public function __construct()
     {
-        $this->yes = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
-
 
 
     public function getId(): ?int
@@ -100,35 +105,66 @@ class Post
         return $this;
     }
 
-    /**
-     * @return Collection|Comment[]
-     */
-    public function getYes(): Collection
-    {
-        return $this->yes;
-    }
 
-    public function addYe(Comment $ye): self
-    {
-        if (!$this->yes->contains($ye)) {
-            $this->yes[] = $ye;
-            $ye->setPost($this);
-        }
 
-        return $this;
-    }
-
-    public function removeYe(Comment $ye): self
+    public function removeComments(Comment $comments): self
     {
-        if ($this->yes->contains($ye)) {
-            $this->yes->removeElement($ye);
+        if ($this->comments->contains($comments)) {
+            $this->comments->removeElement($comments);
             // set the owning side to null (unless already changed)
-            if ($ye->getPost() === $this) {
-                $ye->setPost(null);
+            if ($comments->getPost() === $this) {
+                $comments->setPost(null);
             }
         }
 
         return $this;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getPost() === $this) {
+                $comment->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
     }
 
 

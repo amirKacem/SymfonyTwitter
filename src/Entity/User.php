@@ -5,18 +5,30 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ApiResource
+ * @ApiResource(formats={"json"},
+ *      normalizationContext={"groups"={"posts"}},)
+ * @UniqueEntity(
+ * fields={"username"},
+ * errorPath="usename",
+ * message="username already registered.")
+ *@UniqueEntity(
+ * fields={"email"},
+ * errorPath="email",
+ * message="email already registered.")
  */
+
 class User implements UserInterface
 {
     /**
-     * @Groups("posts")
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -25,37 +37,39 @@ class User implements UserInterface
 
     /**
      *@ORM\Column(type="string", length=190,unique=true)
-     *
+     * @Groups({"posts"})
+     * @Assert\NotBlank
      */
     private $username;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="created_by")
-     * @Groups("posts")
+     * @Groups({"posts"})
      */
     private $no;
 
     /**
      * @ORM\Column(type="string", length=255)
-     *
+     * @Assert\NotBlank
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("posts")
+     * @Groups({"posts"})
+     * @Assert\NotBlank
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"posts"})
+     * @Assert\NotBlank
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="array")
-     *
      */
     private $roles = [];
 
@@ -66,22 +80,40 @@ class User implements UserInterface
 
 
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Profile", mappedBy="user_id")
-     */
-    private $profiles;
+
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="comment_by")
-     * @Groups({"posts"})
      */
     private $comments;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Profile", cascade={"persist", "remove"})
+     */
+    private $profile;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="following")
+     **/
+    private $followers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="followers")
+     * @ORM\JoinTable(name="followers",
+     * joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     * inverseJoinColumns={@ORM\JoinColumn(name="following_user_id", referencedColumnName="id")}
+     * )
+     */
+    private $following;
 
     public function __construct()
     {
         $this->no = new ArrayCollection();
         $this->profiles = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+        $this->following = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -218,36 +250,6 @@ class User implements UserInterface
 
 
 
-    /**
-     * @return Collection|Profile[]
-     */
-    public function getProfiles(): Collection
-    {
-        return $this->profiles;
-    }
-
-    public function addProfile(Profile $profile): self
-    {
-        if (!$this->profiles->contains($profile)) {
-            $this->profiles[] = $profile;
-            $profile->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProfile(Profile $profile): self
-    {
-        if ($this->profiles->contains($profile)) {
-            $this->profiles->removeElement($profile);
-            // set the owning side to null (unless already changed)
-            if ($profile->getUserId() === $this) {
-                $profile->setUserId(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Comment[]
@@ -275,6 +277,79 @@ class User implements UserInterface
             if ($comment->getCommentBy() === $this) {
                 $comment->setCommentBy(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?Profile $profile): self
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(User $follower): self
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers[] = $follower;
+            $follower->addFollowing($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(User $follower): self
+    {
+        if ($this->followers->contains($follower)) {
+            $this->followers->removeElement($follower);
+            $follower->removeFollowing($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getFollowing(): Collection
+    {
+        return $this->following;
+    }
+
+    public function addFollowing(User $following): self
+    {
+        if (!$this->following->contains($following)) {
+            $this->following[] = $following;
+        }
+
+        return $this;
+    }
+
+    public function removeFollowing(User $following): self
+    {
+        if ($this->following->contains($following)) {
+            $this->following->removeElement($following);
         }
 
         return $this;

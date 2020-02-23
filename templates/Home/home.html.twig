@@ -93,3 +93,8 @@
         {%  endblock %}
 
 {% endblock %}
+
+{% block javascripts %}
+    {{  parent() }}
+    <script   src="{{ asset('js/comments/comments.js') }}"></script>
+{% endblock %}

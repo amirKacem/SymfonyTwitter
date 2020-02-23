@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\Profile;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManager;
@@ -47,12 +48,9 @@ class HomeController extends AbstractController
             $form->handleRequest($req);
 
             if ($form->isSubmitted() && $form->isValid()) {
-
                 $post = $form->getData();
-
                 $post->setCreatedBy($this->getUser());
                 $this->em->persist($post);
-
                 $this->em->flush();
                 $this->addFlash('success', 'post added');
                 return $this->redirectToRoute('home');
@@ -73,24 +71,7 @@ class HomeController extends AbstractController
 
     }
 
-    /**
-     * @Route("/post/{id}",name="show_post")
-     */
-    public function show($id){
-        $post = $this->repositry->find($id);
-        return $this->render('post/single_post.html.twig',['post'=>$post]);
-
-    }
 
 
 
-    public function addPost(){
-        $post = new Post();
-        $post->setTitle('First Post')
-            ->setDescription('Description')
-            ->setUserCreated(1);
-        $manager = $this->getDoctrine()->getManager();
-        $manager->persist($post);
-        $manager->flush();
-    }
 }

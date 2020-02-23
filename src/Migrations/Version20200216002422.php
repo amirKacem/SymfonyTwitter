@@ -38,6 +38,5 @@ final class Version20200216002422 extends AbstractMigration
         $this->addSql('ALTER TABLE post ADD user_created INT NOT NULL');
         $this->addSql('ALTER TABLE profile CHANGE user_id_id user_id_id INT DEFAULT NULL, CHANGE short_presentation short_presentation VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`, CHANGE profil_img profil_img VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`, CHANGE couverture_img couverture_img VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`, CHANGE pays pays VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`');
         $this->addSql('DROP INDEX UNIQ_8D93D649F85E0677 ON user');
-        $this->addSql('ALTER TABLE user DROP roles, CHANGE firstname firstname VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`, CHANGE lastname lastname VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`, CHANGE email email VARCHAR(150) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`');
     }
 }

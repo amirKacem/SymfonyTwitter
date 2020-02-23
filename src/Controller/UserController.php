@@ -5,12 +5,15 @@ namespace App\Controller;
 
 
 use App\Entity\Post;
+use App\Entity\Profile;
 use App\Entity\User;
 use App\Form\PostType;
 use App\Form\UserRegisterType;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
+use App\Service\Uploader;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -40,11 +43,12 @@ class UserController extends AbstractController
         $this->postRepo =$postRepo;
         $this->objectManager = $objectManager;
         $this->encoder = $encoder;
+
     }
     /**
      * @Route("/register",name="register")
      */
-    public function register(Request $req,GuardAuthenticatorHandler $guardhandler,LoginFormAuthenticator $formAuthenticator){
+    public function register(Request $req,GuardAuthenticatorHandler $guardhandler,LoginFormAuthenticator $formAuthenticator,Uploader $upload){
 
             $form = $this->createForm(UserRegisterType::class);
             $form->handleRequest($req);
@@ -52,12 +56,30 @@ class UserController extends AbstractController
             {
 
                 if($form->isValid() && $form->isSubmitted()){
+
                     $user = $form->getData();
+                    $profile = new Profile();
+                    $profileImage = $form['Profile']['profil_img']->getData();
+                    $couverture = $form['Profile']['couverture_img']->getData();
+                    $image = $upload->uploadImage($profileImage);
+                    if($image){
+                        $profile->setProfilImg($image);
+                    }
+                    $imageCouv = $upload->uploadImage($couverture);
+                    if($imageCouv){
+                        $profile->setCouvertureImg($imageCouv);
+                    }
+                    $profile->setPays($form['Profile']['pays']->getData());
+                    $profile->setDescription($form['Profile']['description']->getData());
+                    $profile->setShortPresentation($form['Profile']['short_presentation']->getData());
+                    $profile->setUserId($user->getId());
                     $user->setPassword($this->encoder->encodePassword(
                         $user,
                         $user->getPassword()
                     ));
+                    $user->setProfile($profile);
                     $this->objectManager->persist($user);
+                    //$this->objectManager->persist($profile);
                     $this->objectManager->flush();
                     return $guardhandler->authenticateUserAndHandleSuccess(
                         $user,
@@ -149,6 +171,8 @@ class UserController extends AbstractController
         }
 
     }
+
+
 
 
 

@@ -19,6 +19,7 @@ class ProfileRepository extends ServiceEntityRepository
         parent::__construct($registry, Profile::class);
     }
 
+
     // /**
     //  * @return Profile[] Returns an array of Profile objects
     //  */

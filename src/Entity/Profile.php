@@ -41,11 +41,7 @@ class Profile
      */
     private $pays;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="profiles")
-     *
-     */
-    private $user_id;
+
 
     public function getId(): ?int
     {
