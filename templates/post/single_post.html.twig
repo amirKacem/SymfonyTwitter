@@ -24,7 +24,7 @@
 
                                     <div class="comment-sec">
                                         <h3>{{ nbComments }} Comments</h3>
-                                        <ul>
+                                        <ul id="comments">
                                         {% for  comment in post.comments %}
 
                                             <li>
@@ -40,6 +40,7 @@
                                                         <h3>{{ comment.getCommentBy().username }}</h3>
                                                         <span><img src="images/clock.png" alt="">{{ comment.createdat | date }}</span>
                                                         <p>{{ comment.content }}</p>
+
                                                     </div>
                                                 </div><!--comment-list end-->
                                             </li>
@@ -47,7 +48,7 @@
 
                                         {% endfor %}
 
-
+                                        </ul>
                                     </div>
                                 </div><!--usr_quest end-->
                             </div><!--usr-question end-->
@@ -59,11 +60,16 @@
                                     <img src="http://via.placeholder.com/40x40" alt="">
                                 </div>
                                 <div class="post_comment_sec">
-                                    <form>
-                                        <textarea placeholder="Your Answer"></textarea>
-                                        <button type="submit">Post Answer</button>
-                                    </form>
+
+                                        <textarea  id="comment" class="form-control" name='content' placeholder="Your Answer"></textarea>
+
+                                        <input type="hidden" name="_csrf_token"
+                                               value="{{ csrf_token('authenticate') }}">
+
+
                                 </div><!--post_comment_sec end-->
+                                <button class="float-right mt-1 btn btn-md btn-danger" id="addComment" type="submit">Comment</button>
+
                             </div><!--user-poster end-->
                         </div><!--post-comment-box end-->
                         <div class="next-prev">
@@ -72,77 +78,24 @@
                         </div><!--next-prev end-->
                     </div>
                     <div class="col-lg-4">
-                        <div class="widget widget-feat">
-                            <ul>
-                                <li>
-                                    <i class="fa fa-heart"></i>
-                                    <span>1185</span>
-                                </li>
-                                <li>
-                                    <i class="fa fa-comment"></i>
-                                    <span>1165</span>
-                                </li>
-                                <li>
-                                    <i class="fa fa-share-alt"></i>
-                                    <span>1120</span>
-                                </li>
-                                <li>
-                                    <i class="fa fa-eye"></i>
-                                    <span>1009</span>
-                                </li>
-                            </ul>
-                        </div><!--widget-feat end-->
                         <div class="widget widget-user">
-                            <h3 class="title-wd">Top User of the Week</h3>
+                            <h3 class="title-wd">Last 10 users</h3>
                             <ul>
+                                {% for user in lastUsers %}
                                 <li>
                                     <div class="usr-msg-details">
                                         <div class="usr-ms-img">
                                             <img src="http://via.placeholder.com/50x50" alt="">
                                         </div>
                                         <div class="usr-mg-info">
-                                            <h3>Jessica William</h3>
-                                            <p>Graphic Designer </p>
+                                            <h3>{{user.username}}</h3>
+                                            <p>{{user.getProfile().getShortPresentation()}}</p>
                                         </div><!--usr-mg-info end-->
                                     </div>
-                                    <span><img src="images/price1.png" alt="">1185</span>
+                                    <span><img src="images/price1.png" alt="">{{user.getFollowing() | length}}</span>
                                 </li>
-                                <li>
-                                    <div class="usr-msg-details">
-                                        <div class="usr-ms-img">
-                                            <img src="http://via.placeholder.com/50x50" alt="">
-                                        </div>
-                                        <div class="usr-mg-info">
-                                            <h3>John Doe</h3>
-                                            <p>PHP Developer</p>
-                                        </div><!--usr-mg-info end-->
-                                    </div>
-                                    <span><img src="images/price2.png" alt="">1165</span>
-                                </li>
-                                <li>
-                                    <div class="usr-msg-details">
-                                        <div class="usr-ms-img">
-                                            <img src="http://via.placeholder.com/50x50" alt="">
-                                        </div>
-                                        <div class="usr-mg-info">
-                                            <h3>Poonam</h3>
-                                            <p>Wordpress Developer </p>
-                                        </div><!--usr-mg-info end-->
-                                    </div>
-                                    <span><img src="images/price3.png" alt="">1120</span>
-                                </li>
-                                <li>
-                                    <div class="usr-msg-details">
-                                        <div class="usr-ms-img">
-                                            <img src="http://via.placeholder.com/50x50" alt="">
-                                        </div>
-                                        <div class="usr-mg-info">
-                                            <h3>Bill Gates</h3>
-                                            <p>C & C++ Developer </p>
-                                        </div><!--usr-mg-info end-->
-                                    </div>
-                                    <span><img src="images/price4.png" alt="">1009</span>
-                                </li>
+                                {% endfor %}
+
                             </ul>
                         </div><!--widget-user end-->
                         <div class="widget widget-adver">

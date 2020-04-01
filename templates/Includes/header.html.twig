@@ -32,9 +32,9 @@
 
                         </li>
                         <li>
-                            <a  href="{{   path('profile_settings',{id:app.user.id}) }}" title="">
-                                <span><img src="{{   asset('images/icon6.png') }}" alt=""></span>
-                                Settings</a>
+                            <a  href="{{   path('profiles') }}" title="">
+                                <span><img src="{{   asset('images/icon4.png') }}" alt=""></span>
+                                Profiles</a>
                         </li>
 
                     <li>
@@ -59,7 +59,7 @@
 
 
                         {% else %}
-                            <img src="http://via.placeholder.com/100x100" alt="">
+                            <img src="{{  asset('images/100x100.png') }}"  alt="" width="30" height="30">
                         {% endif %}
 
                     </div>

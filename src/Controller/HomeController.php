@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Entity\Profile;
 use App\Form\PostType;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
@@ -25,13 +26,15 @@ class HomeController extends AbstractController
     private $em;
 
     private $userRepo;
+    private $commentRepo;
 
 
-    public function __construct(PostRepository $repositry,EntityManagerInterface $em,UserRepository $userRepo)
+    public function __construct(PostRepository $repositry,CommentRepository $commentRepo,EntityManagerInterface $em,UserRepository $userRepo)
     {
         $this->repositry = $repositry;
         $this->em = $em;
         $this->userRepo = $userRepo;
+        $this->commentRepo =$commentRepo;
 
     }
 
@@ -64,14 +67,14 @@ class HomeController extends AbstractController
             }
         }
 
-
+        $lastUsersRegitred=$this->userRepo->findLastUsersRegsitred(3);
         return $this->render('Home/home.html.twig',[
             'posts'=> $posts,
             'form'=>$form->createView(),
             'last_posts'=> $last_posts,
             'user'=> $user,
-            'users'=> $users
-
+            'users'=> $users,
+            'lastUsersRegitred'=>$lastUsersRegitred
         ]);
       }else{
         return $this->redirectToRoute('login');

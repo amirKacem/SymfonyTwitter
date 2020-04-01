@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,17 +28,24 @@ class UserRegisterType extends AbstractType
                 'invalid_message' => 'The password fields must match.',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
+               'empty_data' => '',
+
                 'first_options'  => ['label' => 'Password'],
                 'second_options' => ['label' => 'Confirm Password'],
+
             ])
             ->add('firstname',TextType::class,
                 ['required' => true,  'error_bubbling' => true])
             ->add('lastname',TextType::class,
                 ['required' => true])
-            ->add('email',EmailType::class)
+            ->add('email',EmailType::class,[
+                'required' => false
+            ])
             ->add('Profile', ProfileFormType::class, [
                 'data_class' => Profile::class,
             ]);
+
+
 
 
 

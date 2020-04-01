@@ -2,15 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 
 class PostController extends AbstractController
@@ -20,13 +24,16 @@ class PostController extends AbstractController
 
     private $em;
     private $commentRepo;
+    private $userRepo;
 
 
-    public function __construct(PostRepository $postRepo,EntityManagerInterface $em,CommentRepository $commentRepo)
+    public function __construct(PostRepository $postRepo,UserRepository $userRepo,EntityManagerInterface $em,CommentRepository $commentRepo)
     {
         $this->postRepo =$postRepo;
         $this->em = $em;
         $this->commentRepo =$commentRepo;
+        $this->userRepo =$userRepo;
+
 
     }
 
@@ -43,10 +50,11 @@ class PostController extends AbstractController
             throw $this->createNotFoundException('Not Post found');
         }
         $countComments = $this->commentRepo->countPostComments($id);
-
+        $lastUsers=$this->userRepo->findLastUsersRegsitred(10);
         return $this->render('post/single_post.html.twig',[
-            'post'=>$post,
-            'nbComments'=>$countComments
+            'post'=> $post,
+            'nbComments'=> $countComments,
+            'lastUsers'=> $lastUsers
             ]);
 
     }
@@ -84,6 +92,9 @@ class PostController extends AbstractController
         return $this->redirectToRoute('home');
 
     }
+
+
+
 
 
 }

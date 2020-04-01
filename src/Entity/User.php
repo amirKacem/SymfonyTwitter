@@ -86,6 +86,24 @@ class User implements UserInterface
      */
     private $profile;
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getProfiles(): ArrayCollection
+    {
+        return $this->profiles;
+    }
+
+    /**
+     * @param ArrayCollection $profiles
+     * @return User
+     */
+    public function setProfiles(ArrayCollection $profiles): User
+    {
+        $this->profiles = $profiles;
+        return $this;
+    }
+
 
     /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="following")
@@ -321,6 +339,13 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function isFollwed(User $follower){
+        if($this->followers->contains($follower)){
+            return true;
+        }
+        return false;
     }
 
     /**

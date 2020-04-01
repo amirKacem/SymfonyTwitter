@@ -13,6 +13,7 @@ use App\Security\LoginFormAuthenticator;
 use App\Service\Uploader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -32,12 +33,17 @@ class UserController extends AbstractController
     private $encoder;
 
 
-    public function __construct(UserRepository $userRepo,PostRepository $postRepo,UserPasswordEncoderInterface $encoder,EntityManagerInterface $objectManager)
+    public function __construct(UserRepository $userRepo,
+                                PostRepository $postRepo,UserPasswordEncoderInterface $encoder,
+                                EntityManagerInterface $objectManager,
+                                EntityManagerInterface $em
+)
     {
         $this->userRepo =$userRepo;
         $this->postRepo =$postRepo;
         $this->objectManager = $objectManager;
         $this->encoder = $encoder;
+        $this->em = $em;
 
     }
     /**
@@ -67,14 +73,13 @@ class UserController extends AbstractController
                     $profile->setPays($form['Profile']['pays']->getData());
                     $profile->setDescription($form['Profile']['description']->getData());
                     $profile->setShortPresentation($form['Profile']['short_presentation']->getData());
-                    $profile->setUserId($user->getId());
+                    $profile->setId($user->getId());
                     $user->setPassword($this->encoder->encodePassword(
                         $user,
                         $user->getPassword()
                     ));
                     $user->setProfile($profile);
                     $this->objectManager->persist($user);
-                    //$this->objectManager->persist($profile);
                     $this->objectManager->flush();
                     return $guardhandler->authenticateUserAndHandleSuccess(
                         $user,
@@ -125,15 +130,42 @@ class UserController extends AbstractController
       {
 
         $users = $this->userRepo->findAllLimit(10);
-        $loggedUser = $this->getUser();
+
         $currentUser = $this->userRepo->find($id);
         $last_posts = $this->postRepo->findLastPosts(10);
         $posts = $this->postRepo->findAllUserPost($id);
+        $lastUsersRegitred=$this->userRepo->findLastUsersRegsitred(3);
 
-        return $this->render('account/index.html.twig',['last_posts'=>$last_posts,'posts'=>$posts,'users'=>$users,'currentUser' =>$currentUser,'loggedUser' =>$loggedUser]);
+        return $this->render('account/index.html.twig',
+            ['last_posts'=>$last_posts,'posts'=>$posts,
+              'users'=>$users,'currentUser' =>$currentUser,'user' =>$currentUser,
+              'lastUsersRegitred'=>$lastUsersRegitred
+            ]);
       }else{
         return $this->redirectToRoute('login');
       }
+    }
+
+    /**
+     * @Route("/api/follow/add", name="api_add", methods={"POST"})
+     */
+    public function addFollower(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+
+            $data = json_decode($request->getContent());
+            $id = $data->id;
+            $user = $this->getUser();
+               $userFollow =  $this->userRepo->find($id);
+            $userFollow->addFollower($user);
+            $this->em->flush();
+
+
+
+
+            return $this->json('follwed');
+        }
+        return new Response('Failed', 404);
     }
 
 

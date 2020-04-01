@@ -5,8 +5,8 @@
                 <div class="user-profile">
                     <div class="username-dt">
                         <div class="usr-pic">
-                            {% if(app.user.profile.getProfilImg()) %}
-                                <img src="{{ asset('upload/user/'~ app.user.profile.getProfilImg())}}" alt="" width="100" height="100">
+                            {% if(user.profile.getProfilImg()) %}
+                                <img src="{{ asset('upload/user/'~ user.profile.getProfilImg())}}" alt="" width="100" height="100">
 
 
                             {% else %}
@@ -22,11 +22,12 @@
                 <ul class="user-fw-status">
                     <li>
                         <h4>Following</h4>
-                        <span>34</span>
+                        <span>{{ app.user.getFollowing() | length }}</span>
+
                     </li>
                     <li>
                         <h4>Followers</h4>
-                        <span>155</span>
+                        <span>{{ app.user.getFollowers() | length }}</span>
                     </li>
                     <li>
                         <a href="user/{{user.id}}" title="">View Profile</a>

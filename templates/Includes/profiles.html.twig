@@ -4,19 +4,23 @@
         <i class="la la-ellipsis-v"></i>
     </div><!--sd-title end-->
     <div class="suggestions-list">
+        <input type="hidden" id="follow__token" name="post[_token]"    value="{{ csrf_token('authenticate') }}">
+
         {% for user in users %}
             {% if app.user.id != user.id %}
                 <div class="suggestion-usd">
                     {% if(user.profile.getProfilImg()) %}
-                        <img src="{{   asset('/upload/user/'~user.profile.getProfilImg()) }}" alt=""width="50" height="50">
+                        <img src="{{   asset('/upload/user/'~user.profile.getProfilImg()) }}" alt="" width="50" height="50" >
                     {%  else %}
-                        <img src="http://via.placeholder.com/50x50" alt="">
+                        <img src="{{  asset('images/100x100.png') }}"  alt="" width="50" height="50">
                     {%  endif %}
                     <div class="sgt-text">
                         <h4>{{user.firstname}} {{user.lastname}}</h4>
                         <span>{{user.username}}</span>
                     </div>
-                    <span onclick="showProfilUser('{{user.username}}')"><i class="la la-plus"></i></span>
+                    {%  if(user.isFollwed(app.user)==false) %}
+                    <span class="follow" data-id='{{ user.id }}' ><i class="la la-plus"></i></span>
+                        {% endif %}
                 </div>
             {% endif %}
         {% endfor %}

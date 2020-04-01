@@ -33,6 +33,15 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findLastUsersRegsitred($limit)
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
 
     /*
     public function findOneBySomeField($value): ?User

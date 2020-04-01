@@ -23,12 +23,14 @@ class ProfileFormType extends AbstractType
             ->add('profil_img',FileType::class,
                 ['required'=>false,
                     'attr' => ['class' => 'form-control-file mt-2 p-2','style'=>"opacity:1"],
-                    'label'=>"Image Profil "]
+                    'label'=>"Image Profil ",
+                    'mapped'=>false]
                     )
             ->add('couverture_img',FileType::class,
                 ['required'=>false,
                     'attr' => ['class' => 'form-control-file mt-2 p-2','style'=>"opacity:1"],
-                    'label'=>"Image Couverture "])
+                    'label'=>"Image Couverture ",
+                    'mapped'=>false])
             ->add('pays',CountryType::class,
                 ['required'=>false,
                     'mapped'=>false]);

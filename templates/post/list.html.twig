@@ -18,7 +18,7 @@
             <div class="ed-opts">
                 <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
                 <ul class="ed-options">
-                    <li><a href="{{ path('user_post_edit',{id:post.id}) }}" title="">Edit Post</a></li>
+
 
                     <li><a href="{{ path('user_post_delete',{id:post.id}) }}" title="">Delete</a></li>
 
@@ -37,12 +37,8 @@
 
         <div class="job-status-bar">
             <ul class="like-com">
-                <li>
-                    <a href="#"><i class="la la-heart"></i> Like</a>
-                    <img src="images/liked-img.png" alt="">
-                    <span>25</span>
-                </li>
-                <li><a href="#" title="" class="com"><img src="images/com.png" alt=""> Comment 15</a></li>
+
+                <li><a href="#" title="" class="com"><img src="images/com.png" alt=""> {{ post.comments | length }} Comments</a></li>
             </ul>
 
         </div>
